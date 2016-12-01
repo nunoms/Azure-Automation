@@ -2,21 +2,17 @@
 	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
-		"hostingPlanName": {
-			"type": "string",
-			"minLength": 1
-		},
 		"siteName": {
 			"type": "string",
 			"metadata": {
 				"description": "The website name. Must be unique."
 			}
 		},
-		"hostingPlanName": {
-			"minLength": 1,
-			"type": "string"
+        "hostingPlanName": {
+			"type": "string",
+			"minLength": 1
 		},
-		"hostingPlanSKU": {
+        "hostingPlanSKU": {
 			"defaultValue": "Free",
 			"allowedValues": [
 				"Free",
@@ -36,10 +32,8 @@
 			"type": "string"
 		}
 	},
-	"variables": {
-		"extensionName": "Microsoft.ApplicationInsights.AzureWebSites"
-	},
-	"resources": [{
+	"resources": [
+    {
 		"type": "Microsoft.Web/serverfarms",
 		"name": "[parameters('hostingPlanName')]",
 		"apiVersion": "2014-06-01",
@@ -53,7 +47,8 @@
 			"workerSize": "[parameters('hostingPlanWorkerSize')]",
 			"numberOfWorkers": 1
 		}
-	}, {
+	},
+    {
 		"apiVersion": "2015-08-01",
 		"name": "[parameters('siteName')]",
 		"type": "Microsoft.Web/sites",
@@ -69,14 +64,8 @@
 			"name": "[parameters('siteName')]",
 			"serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
 		},
-		"resources": [{
-			"apiVersion": "2014-04-01",
-			"name": "[variables('extensionName')]",
-			"type": "siteextensions",
-			"dependsOn": [
-				"[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
-			]
-		}, {
+		"resources": [
+        {
 			"apiVersion": "2015-08-01",
 			"name": "slotconfignames",
 			"type": "config",
@@ -86,7 +75,8 @@
 			"properties": {
 				"appSettingNames": ["APPINSIGHTS_INSTRUMENTATIONKEY"]
 			}
-		}, {
+		}, 
+        {
 			"type": "config",
 			"name": "appsettings",
 			"apiVersion": "2015-04-01",
@@ -96,8 +86,10 @@
 			"dependsOn": [
 				"[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
 			]
-		}]
-	}, {
+		}
+        ]
+	},
+    {
 		"apiVersion": "2014-04-01",
 		"name": "[parameters('siteName')]",
 		"type": "Microsoft.Insights/components",
@@ -112,5 +104,6 @@
 		"properties": {
 			"applicationId": "[parameters('siteName')]"
 		}
-	}]
+	}
+    ]
 }
