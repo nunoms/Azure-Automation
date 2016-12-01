@@ -11,43 +11,23 @@
 		"branch": {
 			"defaultValue": "master",
 			"type": "String"
-		},
-		"hostingPlanName": {
-			"minLength": 1,
-			"type": "string"
-		},
-		"hostingPlanSKU": {
-			"defaultValue": "Free",
-			"allowedValues": [
-				"Free",
-				"Shared",
-				"Basic",
-				"Standard"
-			],
-			"type": "string"
-		},
-		"hostingPlanWorkerSize": {
-			"defaultValue": "0",
-			"allowedValues": [
-				"0",
-				"1",
-				"2"
-			],
-			"type": "string"
 		}
 	},
+    "variables": {
+        "hostingPlanName" : "[concat(parameters('siteName'),'-Plan')]"
+    },
 	"resources": [{
 		"type": "Microsoft.Web/serverfarms",
-		"name": "[parameters('hostingPlanName')]",
+		"name": "[variables('hostingPlanName')]",
 		"apiVersion": "2014-06-01",
 		"location": "[resourceGroup().location]",
 		"tags": {
 			"displayName": "hostingPlanName"
 		},
 		"properties": {
-			"name": "[parameters('hostingPlanName')]",
-			"sku": "[parameters('hostingPlanSKU')]",
-			"workerSize": "[parameters('hostingPlanWorkerSize')]",
+			"name": "[variables('hostingPlanName')]",
+			"sku": "Standard",
+			"workerSize": "0",
 			"numberOfWorkers": 1
 		}
 	}, {
@@ -56,10 +36,10 @@
 		"apiVersion": "2015-04-01",
 		"location": "[resourceGroup().location]",
 		"properties": {
-			"serverFarmId": "[parameters('hostingPlanName')]"
+			"serverFarmId": "[variables('hostingPlanName')]"
 		},
 		"dependsOn": [
-			"[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+			"[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
 		],
 		"resources": [{
 			"type": "slots",
