@@ -43,7 +43,8 @@
 			"workerSize": "[parameters('hostingPlanWorkerSize')]",
 			"numberOfWorkers": 1
 		}
-	}, {
+	},
+    {
 		"type": "Microsoft.Web/sites",
 		"name": "[parameters('vmNames')[copyindex()]]",
 		"apiVersion": "2015-08-01",
