@@ -36,9 +36,6 @@
 			"type": "string"
 		}
 	},
-	"variables": {
-		"hostingPlanName": "[concat(parameters('siteName'),'-Plan')]"
-	},
 	"resources": [{
 		"type": "Microsoft.Web/serverfarms",
 		"name": "[parameters('hostingPlanName')]",
@@ -59,10 +56,10 @@
 		"apiVersion": "2015-04-01",
 		"location": "[resourceGroup().location]",
 		"properties": {
-			"serverFarmId": "[variables('hostingPlanName')]"
+			"serverFarmId": "[parameters('hostingPlanName')]"
 		},
 		"dependsOn": [
-			"[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
+			"[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
 		],
 		"resources": [{
 			"type": "slots",
