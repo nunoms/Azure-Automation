@@ -11,6 +11,18 @@ It's mostly aimed at providing a simple example of how to use _copyindex_ and th
 
 Click the button above to deploy or run the provided script to install it using the following steps:
 
+Note: to ensure the template deploys successfully a random identifier is appended to all web app names to avoid collision, since they need to be unique:
+
+```arm
+[concat(parameters('siteNames')[copyindex()],uniqueString(resourceGroup().id))]
+```
+
+In a real scenario you may want to remove the randomization by replacing the above value with the following (notice there are two occurrences of this):
+```arm
+[parameters('siteNames')[copyindex()]]
+```
+
+
 - Sign-in PowerShell session using your Azure account: 
 
 ```powershell
