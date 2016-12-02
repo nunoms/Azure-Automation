@@ -1,4 +1,4 @@
-# Web App with Diagnostic Logs
+# web-app-diagnostics
 
 This template allows you to setup a web app with some diagnostic log options enabled.
 
