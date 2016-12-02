@@ -5,8 +5,7 @@ Expanding on the web-app-insights template, this template sets up a web app on A
 - Creates 3 application insights resources (production, staging and dev).
 - Configures a staging slot on the web app
 - Configures both the production and staging slot to connect to the corresponding application insight resources
-- Adds the instrumentation key value to the Application Settings on both slots.
-- Returns as an output the Dev instrumentation key
+- Adds the instrumentation key value to the Application Settings on both slots and returns the Dev instrumentation key in the output values
 - Creates several alert rules both at the App Service and the App Service Plan levels.
 - Sets up Diagnostic Logs on the Staging slot
 - Sets up "Testing in Production" feature allowing 20% of traffic to flow to the staging slot
