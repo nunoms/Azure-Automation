@@ -4,7 +4,12 @@
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
 
-This template allows you to create a web app on Azure, already configured to connect to Application Insights and collect telemetry.
+This template allows you to setup a web app with application insights.
+
+- It creates a web app, an app service plan and an application insights resource.
+- Establishes the connection between the web app and application insights
+- Adds a value to Application Settings with the instrumentation key (marked as a slot setting to prevent swaps).
+
 Click the button above to deploy or run the provided script to install it using the following steps:
 
 - Sign-in PowerShell session using your Azure account: 
