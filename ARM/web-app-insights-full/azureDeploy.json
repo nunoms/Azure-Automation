@@ -2,6 +2,9 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "webSiteName": {
+      "type":"string"
+    },
     "hostingPlanName": {
       "type": "string",
       "minLength": 1,
@@ -46,9 +49,6 @@
       }
     }
   },
-  "variables": {
-    "webSiteName": "mybuggywebsite"
-  },
   "resources": [
     {
       "apiVersion": "2015-08-01",
@@ -68,7 +68,7 @@
     },
     {
       "apiVersion": "2015-08-01",
-      "name": "[variables('webSiteName')]",
+      "name": "[parameters('webSiteName')]",
       "type": "Microsoft.Web/sites",
       "location": "[resourceGroup().location]",
       "tags": {
@@ -79,7 +79,7 @@
         "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
       ],
       "properties": {
-        "name": "[variables('webSiteName')]",
+        "name": "[parameters('webSiteName')]",
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
       },
       "resources": [
@@ -88,7 +88,7 @@
           "name": "web",
           "apiVersion": "2015-08-01",
           "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"
+            "[resourceId('Microsoft.Web/Sites', parameters('webSiteName'))]"
           ],
           "properties": {
             "defaultDocuments": [
@@ -97,7 +97,7 @@
             ],
             "routingRules": [
               {
-                "actionHostName": "[reference(resourceId('Microsoft.Web/Sites/slots', variables('webSiteName'), 'Staging'),'2015-05-01').hostNames[0]]",
+                "actionHostName": "[reference(resourceId('Microsoft.Web/Sites/slots', parameters('webSiteName'), 'Staging'),'2015-05-01').hostNames[0]]",
                 "reroutePercentage": "[parameters('percentOfTrafficToStagingSlot')]",
                 "name": "Staging"
               }
@@ -105,7 +105,7 @@
             "experiments": {
               "rampUpRules": [
                 {
-                  "actionHostName": "[reference(resourceId('Microsoft.Web/Sites/slots', variables('webSiteName'), 'Staging'),'2015-05-01').hostNames[0]]",
+                  "actionHostName": "[reference(resourceId('Microsoft.Web/Sites/slots', parameters('webSiteName'), 'Staging'),'2015-05-01').hostNames[0]]",
                   "reroutePercentage": "[parameters('percentOfTrafficToStagingSlot')]",
                   "name": "Staging"
                 }
@@ -118,7 +118,7 @@
           "name": "slotconfignames",
           "type": "config",
           "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"
+            "[resourceId('Microsoft.Web/Sites', parameters('webSiteName'))]"
           ],
           "properties": {
             "appSettingNames": [ "iKey" ]
@@ -130,10 +130,10 @@
           "apiVersion": "2015-04-01",
           "properties": {
             "useExternalApi": "false",
-            "iKey": "[reference(concat('Microsoft.Insights/components/', variables('webSiteName')), '2015-05-01').InstrumentationKey]"
+            "iKey": "[reference(concat('Microsoft.Insights/components/', parameters('webSiteName')), '2015-05-01').InstrumentationKey]"
           },
           "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"
+            "[resourceId('Microsoft.Web/Sites', parameters('webSiteName'))]"
           ]
         },
         {
@@ -143,7 +143,7 @@
           "location": "[resourceGroup().location]",
           "properties": {},
           "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"
+            "[resourceId('Microsoft.Web/Sites', parameters('webSiteName'))]"
           ],
           "resources": [
             {
@@ -152,10 +152,10 @@
               "apiVersion": "2015-04-01",
               "properties": {
                 "useExternalApi": "true",
-                "iKey": "[reference(concat('Microsoft.Insights/components/', variables('webSiteName'), '-Staging'), '2015-05-01').InstrumentationKey]"
+                "iKey": "[reference(concat('Microsoft.Insights/components/', parameters('webSiteName'), '-Staging'), '2015-05-01').InstrumentationKey]"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Web/Sites/slots', variables('webSiteName'), 'Staging')]"
+                "[resourceId('Microsoft.Web/Sites/slots', parameters('webSiteName'), 'Staging')]"
               ]
             },
             {
@@ -197,7 +197,7 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Web/Sites/slots', variables('webSiteName'), 'Staging')]"
+                "[resourceId('Microsoft.Web/Sites/slots', parameters('webSiteName'), 'Staging')]"
               ]
             }
           ]
@@ -206,25 +206,25 @@
     },
     {
       "apiVersion": "2014-04-01",
-      "name": "[concat('ServerErrors ', variables('webSiteName'))]",
+      "name": "[concat('ServerErrors ', parameters('webSiteName'))]",
       "type": "Microsoft.Insights/alertrules",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[concat('Microsoft.Web/sites/', variables('webSiteName'))]"
+        "[concat('Microsoft.Web/sites/', parameters('webSiteName'))]"
       ],
       "tags": {
-        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]": "Resource",
+        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('webSiteName'))]": "Resource",
         "displayName": "ServerErrorsAlertRule"
       },
       "properties": {
-        "name": "[concat('ServerErrors ', variables('webSiteName'))]",
-        "description": "[concat(variables('webSiteName'), ' has some server errors, status code 5xx.')]",
+        "name": "[concat('ServerErrors ', parameters('webSiteName'))]",
+        "description": "[concat(parameters('webSiteName'), ' has some server errors, status code 5xx.')]",
         "isEnabled": false,
         "condition": {
           "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
           "dataSource": {
             "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
-            "resourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]",
+            "resourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('webSiteName'))]",
             "metricName": "Http5xx"
           },
           "operator": "GreaterThan",
@@ -240,25 +240,25 @@
     },
     {
       "apiVersion": "2014-04-01",
-      "name": "[concat('ForbiddenRequests ', variables('webSiteName'))]",
+      "name": "[concat('ForbiddenRequests ', parameters('webSiteName'))]",
       "type": "Microsoft.Insights/alertrules",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[concat('Microsoft.Web/sites/', variables('webSiteName'))]"
+        "[concat('Microsoft.Web/sites/', parameters('webSiteName'))]"
       ],
       "tags": {
-        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]": "Resource",
+        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('webSiteName'))]": "Resource",
         "displayName": "ForbiddenRequestsAlertRule"
       },
       "properties": {
-        "name": "[concat('ForbiddenRequests ', variables('webSiteName'))]",
-        "description": "[concat(variables('webSiteName'), ' has some requests that are forbidden, status code 403.')]",
+        "name": "[concat('ForbiddenRequests ', parameters('webSiteName'))]",
+        "description": "[concat(parameters('webSiteName'), ' has some requests that are forbidden, status code 403.')]",
         "isEnabled": false,
         "condition": {
           "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
           "dataSource": {
             "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
-            "resourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]",
+            "resourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('webSiteName'))]",
             "metricName": "Http403"
           },
           "operator": "GreaterThan",
@@ -342,53 +342,53 @@
     },
     {
       "apiVersion": "2014-04-01",
-      "name": "[variables('webSiteName')]",
+      "name": "[parameters('webSiteName')]",
       "type": "Microsoft.Insights/components",
       "location": "East US",
       "dependsOn": [
-        "[concat('Microsoft.Web/sites/', variables('webSiteName'))]"
+        "[concat('Microsoft.Web/sites/', parameters('webSiteName'))]"
       ],
       "tags": {
-        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]": "Resource",
+        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('webSiteName'))]": "Resource",
         "displayName": "AppInsightsComponent"
       },
       "properties": {
-        "applicationId": "[variables('webSiteName')]"
+        "applicationId": "[parameters('webSiteName')]"
       }
     },
     {
       "apiVersion": "2014-04-01",
-      "name": "[concat(variables('webSiteName'),'-staging')]",
+      "name": "[concat(parameters('webSiteName'),'-staging')]",
       "type": "Microsoft.Insights/components",
       "location": "East US",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/Sites/slots', variables('webSiteName'), 'Staging')]"
+        "[resourceId('Microsoft.Web/Sites/slots', parameters('webSiteName'), 'Staging')]"
       ],
       "tags": {
-        "[concat('hidden-link:', resourceId('Microsoft.Web/Sites/slots', variables('webSiteName'), 'Staging'))]": "Resource",
+        "[concat('hidden-link:', resourceId('Microsoft.Web/Sites/slots', parameters('webSiteName'), 'Staging'))]": "Resource",
         "displayName": "AppInsightsComponent"
       },
       "properties": {
-        "applicationId": "[concat(variables('webSiteName'),'-staging')]"
+        "applicationId": "[concat(parameters('webSiteName'),'-staging')]"
       }
     },
     {
       "apiVersion": "2014-04-01",
-      "name": "[concat(variables('webSiteName'),'-dev')]",
+      "name": "[concat(parameters('webSiteName'),'-dev')]",
       "type": "Microsoft.Insights/components",
       "location": "East US",
       "tags": {
         "displayName": "AppInsightsComponent"
       },
       "properties": {
-        "applicationId": "[concat(variables('webSiteName'),'-dev')]"
+        "applicationId": "[concat(parameters('webSiteName'),'-dev')]"
       }
     }
   ],
   "outputs": {
     "ApplicationInsightsDevKey": {
       "type": "string",
-      "value": "[reference(concat('Microsoft.Insights/components/', variables('webSiteName'), '-dev'), '2015-05-01').InstrumentationKey]"
+      "value": "[reference(concat('Microsoft.Insights/components/', parameters('webSiteName'), '-dev'), '2015-05-01').InstrumentationKey]"
     }
   }
 }
