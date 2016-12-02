@@ -1,4 +1,4 @@
-# Web App with Diagnostic Logs
+# web-app-staging-slot-continuous-deployment
 
 This templates enables a simple continuous deployment scenario.
 

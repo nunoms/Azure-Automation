@@ -1,4 +1,4 @@
-# Web App with Diagnostic Logs
+# web-apps-array-parameter
 
 This is a simple template that takes an array with site names as an input parameter and creates the respective web apps.
 It's mostly aimed at providing a simple example of how to use _copyindex_ and the array functions on ARM templates.

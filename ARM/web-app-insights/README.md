@@ -1,4 +1,4 @@
-# Web App with Application Insights
+#web-app-diagnostics
 
 This template allows you to setup a web app with application insights.
 

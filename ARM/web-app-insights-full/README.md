@@ -1,4 +1,4 @@
-# Web App with Application Insights
+# web-app-insights-full
 
 Expanding on the web-app-insights template, this template sets up a web app on Azure and several application insight resources for multiple environment telemetry collection.
 
