@@ -10,6 +10,8 @@ This template allows you to setup a web app with application insights.
 - Establishes the connection between the web app and application insights
 - Adds a value to Application Settings with the instrumentation key (marked as a slot setting to prevent swaps).
 
+You need to make changes to your webapp to ensure you are reading the instrumentation key from the application settings. See [this link](https://blogs.msdn.microsoft.com/visualstudioalm/2015/01/07/application-insights-support-for-multiple-environments-stamps-and-app-versions/) for more information
+
 Click the button above to deploy or run the provided script to install it using the following steps:
 
 - Sign-in PowerShell session using your Azure account: 
