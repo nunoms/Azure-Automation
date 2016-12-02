@@ -7,5 +7,19 @@
 This template allows you to create a web app on Azure, already configured to connect to Application Insights and collect telemetry.
 Click the button above to deploy or run the provided script to install it using the following steps:
 
-*Sign-in PowerShell session using your Azure account Login-AzureRMAccount
-*Make sure the correct subscription is selected, otherwise execute *Select-AzureRmSubscription -SubscriptionId $subscriptionId*
+- Sign-in PowerShell session using your Azure account: 
+
+```powershell
+Login-AzureRMAccount
+```
+- Make sure the correct subscription is selected, otherwise execute:
+
+```powershell
+Select-AzureRmSubscription -SubscriptionId $subscriptionId
+```
+
+- Finally execute the setup script:
+
+```powershell
+setup.ps1
+```
