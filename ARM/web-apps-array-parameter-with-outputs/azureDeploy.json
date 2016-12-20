@@ -45,36 +45,48 @@
         "numberOfWorkers": 1
       }
     },
+     {
+      "apiVersion": "2016-09-01",
+      "name": "nestedTemplate0",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/nunoms/Azure-Automation/master/ARM/web-apps-array-parameter-with-outputs/innerTemplate.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "siteName": {"value": "[parameters('siteNames')[0]]"},
+          "serverFarm" : {"value": "[resourceId('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]" }
+        }
+      }
+    },
     {
-      "type": "Microsoft.Web/sites",
-      "name": "[concat(parameters('siteNames')[copyindex()],uniqueString(resourceGroup().id))]",
-      "apiVersion": "2015-08-01",
-      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-09-01",
+      "name": "[concat('nestedTemplate', copyIndex(1))]",
+      "type": "Microsoft.Resources/deployments",
       "copy": {
-        "name": "vmNameLoop",
-        "count": "[length(parameters('siteNames'))]"
-      },
-      "tags": {
-        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "Resource",
-        "displayName": "webAppName"
+        "name": "storagecopy",
+        "count": "[sub(length(parameters('siteNames')), 1)]"
       },
       "properties": {
-        "name": "[concat(parameters('siteNames')[copyindex()],uniqueString(resourceGroup().id))]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
-      },
-      "dependsOn": [
-        "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
-      ]
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/nunoms/Azure-Automation/master/ARM/web-apps-array-parameter-with-outputs/innerTemplate.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "siteName": {"value": "[parameters('siteNames')[copyIndex(1)]]"},
+          "IPs": {"value": "[reference(concat('nestedTemplate', copyIndex())).outputs.result.value]"},
+           "serverFarm" : {"value": "[resourceId('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]" }
+        }
+      }
     }
   ],
-  "outputs" :{
-    	"frontEndWebAppIPs": {
-        "copy": {
-          "name": "outputLoop",
-          "count": "[length(parameters('siteNames'))]"
-        },
-			"value": "[reference(resourceId('Microsoft.Web/sites', concat(parameters('siteNames')[copyindex()],uniqueString(resourceGroup().id)))).outboundIpAddresses]",
-			"type": "string"
-		}
+   "outputs": {
+    "result": {
+      "type": "object",
+      "value": "[reference(concat('nestedTemplate', sub(length(parameters('siteNames')), 1))).outputs.result]"
+    }
   }
 }
