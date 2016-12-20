@@ -7,7 +7,7 @@ param(
     [string] $resourceGroupName
 )
 
-$baseUrl = "https://raw.githubusercontent.com/nunoms/Azure-Automation/master/ARM/web-apps-array-parameter"
+$baseUrl = "https://raw.githubusercontent.com/nunoms/Azure-Automation/master/ARM/web-apps-array-parameter-with-outputs"
 $templateUri = "$baseUrl/azureDeploy.json"
 $parameterUri = "$baseUrl/azureDeploy.parameters.json"
 
@@ -31,6 +31,6 @@ if ($remote) {
 }
 else {
     Write-Host "`nInstalling azureDeploy.json template" -ForegroundColor Yellow
-    New-AzureRMResourceGroupDeployment -TemplateFile .\outerTemplate.json -TemplateParameterFile .\azureDeploy.parameters.json
+    New-AzureRMResourceGroupDeployment -TemplateFile .\azureDeploy.json -TemplateParameterFile .\azureDeploy.parameters.json
 }
 
