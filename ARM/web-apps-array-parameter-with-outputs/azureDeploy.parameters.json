@@ -1,0 +1,18 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "siteNames": {
+        "value": [ "website1-nunos", "website2-nunos"]
+    },
+    "hostingPlanName": {
+      "value": "webappsarray-plan"
+    },
+    "hostingPlanSku": {
+        "value": "Free"
+    },
+     "hostingPlanWorkerSize": {
+        "value": "0"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+   {
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "IPs": {
+        "type": "array",
+      "defaultValue": []
+    },
+    "siteName": {
+        "type": "string"
+    },
+    "serverFarm": {
+        "type": "string"
+    }
+  },
+  "resources": [
+ {
+      "type": "Microsoft.Web/sites",
+      "name": "[parameters('siteName')]",
+      "apiVersion": "2015-08-01",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "name": "[parameters('siteName')]",
+        "serverFarmId": "[parameters('serverFarm')]"
+      },
+      "dependsOn": [
+        "[parameters('serverFarm')]"
+      ]
+    }
+  ],
+   "outputs": {
+      "result": {
+        "type": "array",
+      "value": "[concat(parameters('IPs'),split(reference(parameters('siteName')).outboundIpAddresses, ','))]"
+    }
+}
+   }
+
+   
+  
