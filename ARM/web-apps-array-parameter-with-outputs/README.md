@@ -1,7 +1,7 @@
-# web-apps-array-parameter
+# web-apps-array-parameter-with-output
 
-This is a simple template that takes an array with site names as an input parameter and creates the respective web apps.
-It's mostly aimed at providing a simple example of how to use _copyindex_ and the array functions on ARM templates.
+This is a fairly complicated template that takes an array with site names as an input parameter and creates the respective web apps, 
+but it uses a nested template to deploy each website. The process shown here allows to extract all the ip addresses from all the webapps in the outputs secion.
 
 ## Setup
 
