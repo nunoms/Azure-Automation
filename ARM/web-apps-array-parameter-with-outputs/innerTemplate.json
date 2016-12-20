@@ -9,7 +9,7 @@
     "siteName": {
         "type": "string"
     },
-    "serverFarm": {
+    "serverFarmName": {
         "type": "string"
     }
   },
@@ -21,11 +21,8 @@
       "location": "[resourceGroup().location]",
       "properties": {
         "name": "[parameters('siteName')]",
-        "serverFarmId": "[parameters('serverFarm')]"
-      },
-      "dependsOn": [
-        "[parameters('serverFarm')]"
-      ]
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverFarmName'))]"
+      }
     }
   ],
    "outputs": {

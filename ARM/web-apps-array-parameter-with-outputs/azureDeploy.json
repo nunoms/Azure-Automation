@@ -57,7 +57,7 @@
         },
         "parameters": {
           "siteName": {"value": "[parameters('siteNames')[0]]"},
-          "serverFarm" : {"value": "[resourceId('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]" }
+          "serverFarmName" : {"value": "[parameters('hostingPlanName')]" }
         }
       }
     },
@@ -78,7 +78,8 @@
         "parameters": {
           "siteName": {"value": "[parameters('siteNames')[copyIndex(1)]]"},
           "IPs": {"value": "[reference(concat('nestedTemplate', copyIndex())).outputs.result.value]"},
-           "serverFarm" : {"value": "[resourceId('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]" }
+          "serverFarmName" : {"value": "[parameters('hostingPlanName')]" }
+          
         }
       }
     }
