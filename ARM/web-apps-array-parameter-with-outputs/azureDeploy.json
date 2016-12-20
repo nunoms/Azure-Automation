@@ -49,6 +49,9 @@
       "apiVersion": "2016-09-01",
       "name": "nestedTemplate0",
       "type": "Microsoft.Resources/deployments",
+      "dependsOn": [
+        "[parameters('hostingPlanName')]"
+      ],
       "properties": {
         "mode": "incremental",
         "templateLink": {
@@ -69,6 +72,9 @@
         "name": "storagecopy",
         "count": "[sub(length(parameters('siteNames')), 1)]"
       },
+       "dependsOn": [
+        "[parameters('hostingPlanName')]"
+      ],
       "properties": {
         "mode": "incremental",
         "templateLink": {
